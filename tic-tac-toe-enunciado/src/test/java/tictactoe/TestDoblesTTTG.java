@@ -10,7 +10,7 @@ import org.mockito.ArgumentCaptor;
 import es.codeurjc.ais.tictactoe.*;
 import static org.mockito.Mockito.*;
 
-public class TTTGTest {
+public class TestDoblesTTTG {
 	
 	TicTacToeGame t3g = new TicTacToeGame();
     Connection c1;
@@ -18,6 +18,9 @@ public class TTTGTest {
     Player p1;
     Player p2;
 
+    /**
+	 * INICIALIZACION DE LAS VARIABLES NECESARIAS EN LOS TEST CON DOBLES
+	 * */
 	@Before
 	public void setUp() {
 		c1 = mock(Connection.class);
@@ -41,8 +44,11 @@ public class TTTGTest {
         verify(c2).sendEvent(TicTacToeGame.EventType.SET_TURN, p1);
 	}
 	
+	/**
+	 * TESTEO DE LA VICTORIA DEL PRIMER JUGADOR EN MOVER FICHA
+	 * */
 	@Test
-	public void testVictoria() {
+	public void testVictoriaPrimerJugador() {
 		t3g.mark(0);
         verify(c1).sendEvent(TicTacToeGame.EventType.SET_TURN, p2);
         verify(c2).sendEvent(TicTacToeGame.EventType.SET_TURN, p2);
@@ -68,10 +74,52 @@ public class TTTGTest {
         TicTacToeGame.WinnerValue event = argument.getValue();
         
         int[] pos = {0, 1, 2};       
-        assertEquals("Gana el jugador correcto: ", event.player.getId(), p1.getId());
+        assertEquals("Gana el jugador primero: ", event.player.getId(), p1.getId());
         assertArrayEquals("Posiciones de las fichas: ", event.pos, pos);
 	}
 	
+	/**
+	 * TESTEO DE LA VICTORIA DEL SEGUNDO JUGADOR EN MOVER FICHA
+	 * */
+	@Test
+	public void testVictoriaSegundoJugador() {
+		t3g.mark(8);
+        verify(c1).sendEvent(TicTacToeGame.EventType.SET_TURN, p2);
+        verify(c2).sendEvent(TicTacToeGame.EventType.SET_TURN, p2);
+        reset(c1);
+        reset(c2);
+        t3g.mark(0);
+        verify(c1).sendEvent(TicTacToeGame.EventType.SET_TURN, p1);
+        verify(c2).sendEvent(TicTacToeGame.EventType.SET_TURN, p1);
+        
+        t3g.mark(4);
+        verify(c1).sendEvent(TicTacToeGame.EventType.SET_TURN, p2);
+        verify(c2).sendEvent(TicTacToeGame.EventType.SET_TURN, p2);
+        reset(c1);
+        reset(c2);
+        t3g.mark(1);
+        verify(c1).sendEvent(TicTacToeGame.EventType.SET_TURN, p1);
+        verify(c2).sendEvent(TicTacToeGame.EventType.SET_TURN, p1);
+        
+        t3g.mark(6);
+        verify(c1).sendEvent(TicTacToeGame.EventType.SET_TURN, p2);
+        verify(c2).sendEvent(TicTacToeGame.EventType.SET_TURN, p2);
+        reset(c1);
+        reset(c2);
+        t3g.mark(2);
+        
+        ArgumentCaptor<TicTacToeGame.WinnerValue> argument = ArgumentCaptor.forClass(TicTacToeGame.WinnerValue.class);
+        verify(c1).sendEvent(eq(TicTacToeGame.EventType.GAME_OVER), argument.capture());
+        TicTacToeGame.WinnerValue event = argument.getValue();
+        
+        int[] pos = {0, 1, 2};       
+        assertEquals("Gana el jugador segundo: ", event.player.getId(), p2.getId());
+        assertArrayEquals("Posiciones de las fichas: ", event.pos, pos);
+	}
+	
+	/**
+	 * TESTEO DEL EMPATE ENTRE AMBOS JUGADORES
+	 * */
 	@Test
 	public void testEmpate() {
 		t3g.mark(4);

@@ -9,10 +9,13 @@ import org.junit.Before;
 import es.codeurjc.ais.tictactoe.*;
 import es.codeurjc.ais.tictactoe.TicTacToeGame.WinnerResult;
 
-public class BoardTest {
+public class TestUnitariosBoard {
 	
 	TicTacToeGame t3g;
 	
+	/**
+	 * FUNCION GENERADORA DE VICTORIAS DEL PRIMER JUGADOR SOBRE EL SEGUNDO
+	 * */
 	public void generadorVictoria() {		
 		t3g.mark(0);
 		t3g.mark(4);
@@ -21,6 +24,9 @@ public class BoardTest {
 		t3g.mark(2);
 	}
 	
+	/**
+	 * FUNCION GENERADORA DE EMPATES ENTRE AMBOS JUGADORES
+	 * */
 	public void generadorEmpate() {
 		t3g.mark(0);
 		t3g.mark(4);
@@ -33,6 +39,9 @@ public class BoardTest {
 		t3g.mark(5);
 	}
 
+	/**
+	 * INICIALIZACION DE LAS VARIABLES NECESARIAS EN LOS TEST UNITARIOS
+	 * */
 	@Before
 	public void setUp() {
 		t3g = new TicTacToeGame();
@@ -41,18 +50,27 @@ public class BoardTest {
 		t3g.addPlayer(new Player(1, "o", "Isaac"));
 	}
 	
+	/**
+	 * TEST SOBRE LA COMPROBACION DIRECTA DE EMPATES
+	 * */
 	@Test
 	public void testCheckDraw_True() {
 		generadorEmpate();
 		assertEquals("Empate entre ambos jugadores", t3g.checkDraw(), true);
 	}
 	
+	/**
+	 * TEST SOBRE LA VICTORIA DIRECTA DE UNO DE LOS JUGADORES
+	 * */
 	@Test
 	public void testCheckDraw_False() {		
 		generadorVictoria();
 		assertEquals("Victoria de un jugador", t3g.checkDraw(), false);
 	}
 	
+	/**
+	 * TEST SOBRE LA FUNCION COMPROBANTE DE SI HAY GANADOR, EMPATANDO EN ESTE CASO
+	 * */
 	@Test
 	public void testgetCellsIfWinner_NoWinner() {
 		generadorEmpate();
@@ -64,6 +82,9 @@ public class BoardTest {
 		assertEquals("No hay victoria: array vacio", wr2.pos, wr.pos);
 	}
 	
+	/**
+	 * TEST SOBRE LA FUNCION COMPROBANTE DE SI HAY GANADOR, VICTORIA DE UN JUGADOR
+	 * */
 	@Test
 	public void testgetCellsIfWinner_Winner() {
 		generadorVictoria();
