@@ -3,34 +3,25 @@ package tictactoe;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+
+import org.junit.Before;
+
 import es.codeurjc.ais.tictactoe.*;
 import es.codeurjc.ais.tictactoe.TicTacToeGame.WinnerResult;
 
 public class BoardTest {
 	
-	public TicTacToeGame empateAux(TicTacToeGame t3g) {
-		Player p1 = new Player(0, "x", "Jorge");
-		Player p2 = new Player(1, "o", "Isaac");
-		
-		t3g.addPlayer(p1);
-		t3g.addPlayer(p2);
-		
+	TicTacToeGame t3g;
+	
+	public void generadorVictoria() {		
 		t3g.mark(0);
 		t3g.mark(4);
 		t3g.mark(1);
 		t3g.mark(6);
 		t3g.mark(2);
-		
-		return t3g;
 	}
 	
-	public TicTacToeGame victoriaAux(TicTacToeGame t3g) {
-		Player p1 = new Player(0, "x", "Jorge");
-		Player p2 = new Player(1, "o", "Isaac");
-		
-		t3g.addPlayer(p1);
-		t3g.addPlayer(p2);
-
+	public void generadorEmpate() {
 		t3g.mark(0);
 		t3g.mark(4);
 		t3g.mark(3);
@@ -40,28 +31,31 @@ public class BoardTest {
 		t3g.mark(7);
 		t3g.mark(1);
 		t3g.mark(5);
+	}
+
+	@Before
+	public void setUp() {
+		t3g = new TicTacToeGame();
 		
-		return t3g;
+		t3g.addPlayer(new Player(0, "x", "Jorge"));
+		t3g.addPlayer(new Player(1, "o", "Isaac"));
 	}
 	
 	@Test
 	public void testCheckDraw_True() {
-		TicTacToeGame t3g = new TicTacToeGame();
-		t3g = victoriaAux(t3g);
+		generadorEmpate();
 		assertEquals("Empate entre ambos jugadores", t3g.checkDraw(), true);
 	}
 	
 	@Test
-	public void testCheckDraw_False() {
-		TicTacToeGame t3g = new TicTacToeGame();		
-		t3g = empateAux(t3g);
+	public void testCheckDraw_False() {		
+		generadorVictoria();
 		assertEquals("Victoria de un jugador", t3g.checkDraw(), false);
 	}
 	
 	@Test
 	public void testgetCellsIfWinner_NoWinner() {
-		TicTacToeGame t3g = new TicTacToeGame();
-		t3g = victoriaAux(t3g);
+		generadorEmpate();
 		WinnerResult wr = new WinnerResult();
 		wr.win = false;
 		wr.pos = null;
@@ -72,8 +66,7 @@ public class BoardTest {
 	
 	@Test
 	public void testgetCellsIfWinner_Winner() {
-		TicTacToeGame t3g = new TicTacToeGame();
-		t3g = empateAux(t3g);
+		generadorVictoria();
 		WinnerResult wr = new WinnerResult();
 		wr.win = true;
 		int[] val = {0, 1, 2};
