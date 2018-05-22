@@ -78,8 +78,8 @@ public class UnitariosBoardTest {
 		wr.win = false;
 		wr.pos = null;
 		WinnerResult wr2 = t3g.checkWinner();
-		assertEquals("No hay victoria: boolean", wr2.win, wr.win);
-		assertEquals("No hay victoria: array vacio", wr2.pos, wr.pos);
+		assertEquals("No hay victoria: win", wr2.win, wr.win);
+		assertEquals("No hay victoria: array vacio (pos)", wr2.pos, wr.pos);
 	}
 	
 	/**
@@ -93,8 +93,8 @@ public class UnitariosBoardTest {
 		int[] val = {0, 1, 2};
 		wr.pos = val;
 		WinnerResult wr2 = t3g.checkWinner();
-		assertEquals("Hay victoria: boolean", wr2.win, wr.win);
-		assertArrayEquals("Hay victoria: array iguales", wr2.pos, wr.pos);
+		assertEquals("Hay victoria: win", wr2.win, wr.win);
+		assertArrayEquals("Hay victoria: array iguales (pos)", wr2.pos, wr.pos);
 	}
 	
 }
