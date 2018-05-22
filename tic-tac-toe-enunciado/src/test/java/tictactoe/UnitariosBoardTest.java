@@ -9,7 +9,7 @@ import org.junit.Before;
 import es.codeurjc.ais.tictactoe.*;
 import es.codeurjc.ais.tictactoe.TicTacToeGame.WinnerResult;
 
-public class TestUnitariosBoard {
+public class UnitariosBoardTest {
 	
 	TicTacToeGame t3g;
 	

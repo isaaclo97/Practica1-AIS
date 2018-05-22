@@ -9,10 +9,12 @@ import org.mockito.ArgumentCaptor;
 
 import es.codeurjc.ais.tictactoe.*;
 import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
-public class TestDoblesTTTG {
+public class DoblesTTTGTest {
 	
-	TicTacToeGame t3g = new TicTacToeGame();
+    TicTacToeGame t3g = new TicTacToeGame();
     Connection c1;
     Connection c2;
     Player p1;
