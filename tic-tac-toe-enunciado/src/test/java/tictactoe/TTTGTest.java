@@ -1,29 +1,122 @@
 package tictactoe;
 
-import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import org.junit.Before;
 import org.junit.Test;
-import es.codeurjc.ais.tictactoe.*;
-import es.codeurjc.ais.tictactoe.TicTacToeGame.EventType;
+import org.mockito.ArgumentCaptor;
 
+import es.codeurjc.ais.tictactoe.*;
 import static org.mockito.Mockito.*;
 
 public class TTTGTest {
+	
+	TicTacToeGame t3g = new TicTacToeGame();
+    Connection c1;
+    Connection c2;
+    Player p1;
+    Player p2;
 
-	@Test
-	public void testCheckDraw_True() {
-		TicTacToeGame t3g = new TicTacToeGame();
-		
-		Connection c1 = mock(Connection.class);
-		
+	@Before
+	public void setUp() {
+		c1 = mock(Connection.class);
 		t3g.addConnection(c1);
+		c2 = mock(Connection.class);
+		t3g.addConnection(c2);
 		
-		Player p1 = new Player(0, "x", "Jorge");
-		Player p2 = new Player(1, "o", "Isaac");
+		p1 = new Player(1, "x", "Jorge");
 		t3g.addPlayer(p1);
-		t3g.addPlayer(p2);
-		
-		verify(c1).sendEvent(eq(EventType.JOIN_GAME), argThat(hasItems(p1, p2)));
-		
+        verify(c1).sendEvent(eq(TicTacToeGame.EventType.JOIN_GAME), argThat(hasItems(p1)));
+        verify(c2).sendEvent(eq(TicTacToeGame.EventType.JOIN_GAME), argThat(hasItems(p1)));
+        reset(c1); 
+        reset(c2);
+		p2 = new Player(2, "o", "Isaac");        
+        t3g.addPlayer(p2);
+        verify(c1).sendEvent(eq(TicTacToeGame.EventType.JOIN_GAME), argThat(hasItems(p1,p2)));
+        verify(c2).sendEvent(eq(TicTacToeGame.EventType.JOIN_GAME), argThat(hasItems(p1,p2)));
+
+        
+        verify(c1).sendEvent(TicTacToeGame.EventType.SET_TURN, p1);
+        verify(c2).sendEvent(TicTacToeGame.EventType.SET_TURN, p1);
 	}
+	
+	@Test
+	public void testVictoria() {
+		t3g.mark(0);
+        verify(c1).sendEvent(TicTacToeGame.EventType.SET_TURN, p2);
+        verify(c2).sendEvent(TicTacToeGame.EventType.SET_TURN, p2);
+        reset(c1);
+        reset(c2);
+        t3g.mark(8);
+        verify(c1).sendEvent(TicTacToeGame.EventType.SET_TURN, p1);
+        verify(c2).sendEvent(TicTacToeGame.EventType.SET_TURN, p1);
+        
+        t3g.mark(1);
+        verify(c1).sendEvent(TicTacToeGame.EventType.SET_TURN, p2);
+        verify(c2).sendEvent(TicTacToeGame.EventType.SET_TURN, p2);
+        reset(c1);
+        reset(c2);
+        t3g.mark(5);
+        verify(c1).sendEvent(TicTacToeGame.EventType.SET_TURN, p1);
+        verify(c2).sendEvent(TicTacToeGame.EventType.SET_TURN, p1);
+        
+        t3g.mark(2);	
+        
+        ArgumentCaptor<TicTacToeGame.WinnerValue> argument = ArgumentCaptor.forClass(TicTacToeGame.WinnerValue.class);
+        verify(c1).sendEvent(eq(TicTacToeGame.EventType.GAME_OVER), argument.capture());
+        TicTacToeGame.WinnerValue event = argument.getValue();
+        
+        int[] pos = {0, 1, 2};       
+        assertEquals("Gana el jugador correcto: ", event.player.getId(), p1.getId());
+        assertArrayEquals("Posiciones de las fichas: ", event.pos, pos);
+	}
+	
+	@Test
+	public void testEmpate() {
+		t3g.mark(4);
+        verify(c1).sendEvent(TicTacToeGame.EventType.SET_TURN, p2);
+        verify(c2).sendEvent(TicTacToeGame.EventType.SET_TURN, p2);
+        reset(c1);
+        reset(c2);
+        t3g.mark(0);
+        verify(c1).sendEvent(TicTacToeGame.EventType.SET_TURN, p1);
+        verify(c2).sendEvent(TicTacToeGame.EventType.SET_TURN, p1);
+        
+        t3g.mark(1);
+        verify(c1).sendEvent(TicTacToeGame.EventType.SET_TURN, p2);
+        verify(c2).sendEvent(TicTacToeGame.EventType.SET_TURN, p2);
+        reset(c1);
+        reset(c2);
+        t3g.mark(7);
+        verify(c1).sendEvent(TicTacToeGame.EventType.SET_TURN, p1);
+        verify(c2).sendEvent(TicTacToeGame.EventType.SET_TURN, p1);
+        
+        t3g.mark(2);
+        verify(c1).sendEvent(TicTacToeGame.EventType.SET_TURN, p2);
+        verify(c2).sendEvent(TicTacToeGame.EventType.SET_TURN, p2);
+        reset(c1);
+        reset(c2);
+        t3g.mark(6);
+        verify(c1).sendEvent(TicTacToeGame.EventType.SET_TURN, p1);
+        verify(c2).sendEvent(TicTacToeGame.EventType.SET_TURN, p1);
+        
+        t3g.mark(3);
+        verify(c1).sendEvent(TicTacToeGame.EventType.SET_TURN, p2);
+        verify(c2).sendEvent(TicTacToeGame.EventType.SET_TURN, p2);
+        reset(c1);
+        reset(c2);
+        t3g.mark(5);
+        verify(c1).sendEvent(TicTacToeGame.EventType.SET_TURN, p1);
+        verify(c2).sendEvent(TicTacToeGame.EventType.SET_TURN, p1);
+        
+        t3g.mark(8);	
+        
+        ArgumentCaptor<TicTacToeGame.WinnerValue> argument = ArgumentCaptor.forClass(TicTacToeGame.WinnerValue.class);
+        verify(c1).sendEvent(eq(TicTacToeGame.EventType.GAME_OVER), argument.capture());
+        TicTacToeGame.WinnerValue event = argument.getValue();
+        
+        assertEquals("Empate no hay evento: ", event, null);
+	}
+
 }

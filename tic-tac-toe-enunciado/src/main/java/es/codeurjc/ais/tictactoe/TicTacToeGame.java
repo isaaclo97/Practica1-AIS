@@ -25,9 +25,9 @@ public class TicTacToeGame {
 		Player player;
 	}
 
-	static class WinnerValue implements Serializable {
-		Player player;
-		int[] pos;
+	public static class WinnerValue implements Serializable {
+		public Player player;
+		public int[] pos;
 	}
 
 	static class Event implements Serializable {
