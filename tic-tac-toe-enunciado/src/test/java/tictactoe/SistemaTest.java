@@ -37,18 +37,24 @@ public class SistemaTest {
     driver1.quit();
     }
     }
-    @Test
-    public void nick () throws InterruptedException {
+    /* Método de loguearse automaticamente con los nicks que se le pasen */
+    public void login(String addnick, String addnick1)
+    {
         driver.get("http://localhost:8080/");
         driver1.get("http://localhost:8080/");
-        String addnick = "Isaac";
-        String addnick1 = "Jorge";
         driver.findElement(By.id("nickname")).sendKeys(addnick);
         driver1.findElement(By.id("nickname")).sendKeys(addnick1);
-        addnick = "X "+addnick;
-        addnick1 = addnick1 +" O";
         driver.findElement(By.id("startBtn")).click();
         driver1.findElement(By.id("startBtn")).click();
+    }
+    @Test
+    /* Método AÑADIDO compara los nicks en las dos diferentes pantallas*/
+    public void nick (){
+        String addnick = "Isaac";
+        String addnick1 = "Jorge";
+        login(addnick,addnick1);
+        addnick = "X "+addnick;
+        addnick1 = addnick1 +" O";
         String nick1 = driver.findElement(By.id("p1Score")).getText();
         String nick11 = driver1.findElement(By.id("p1Score")).getText();
         String nick2 = driver.findElement(By.id("p2Score")).getText();
@@ -59,15 +65,11 @@ public class SistemaTest {
         assertThat(addnick1).isEqualTo(nick22);
     }
      @Test
-    public void win () throws InterruptedException {
-        driver.get("http://localhost:8080/");
-        driver1.get("http://localhost:8080/");
+    /* Método que el primer jugador que pone la jugada es el que gana*/
+    public void win (){
         String addnick = "Isaac";
         String addnick1 = "Jorge";
-        driver.findElement(By.id("nickname")).sendKeys(addnick);
-        driver1.findElement(By.id("nickname")).sendKeys(addnick1);
-        driver.findElement(By.id("startBtn")).click();
-        driver1.findElement(By.id("startBtn")).click();
+        login(addnick,addnick1);
         driver.findElement(By.id("cell-0")).click();
         driver1.findElement(By.id("cell-3")).click();
         driver.findElement(By.id("cell-1")).click();
@@ -76,16 +78,12 @@ public class SistemaTest {
         String res = driver.switchTo().alert().getText();
         assertThat(res).isEqualTo(addnick+" wins! "+addnick1+" looses.");
     }
-         @Test
-    public void draw () throws InterruptedException {
-        driver.get("http://localhost:8080/");
-        driver1.get("http://localhost:8080/");
+    @Test
+    /* Método que queda empate */    
+    public void draw (){
         String addnick = "Isaac";
         String addnick1 = "Jorge";
-        driver.findElement(By.id("nickname")).sendKeys(addnick);
-        driver1.findElement(By.id("nickname")).sendKeys(addnick1);
-        driver.findElement(By.id("startBtn")).click();
-        driver1.findElement(By.id("startBtn")).click();
+        login(addnick,addnick1);
         driver.findElement(By.id("cell-0")).click();
         driver1.findElement(By.id("cell-3")).click();
         driver.findElement(By.id("cell-1")).click();
@@ -98,16 +96,12 @@ public class SistemaTest {
         String res = driver.switchTo().alert().getText();
         assertThat(res).isEqualTo("Draw!");
     }
-         @Test
-    public void loss () throws InterruptedException {
-       driver.get("http://localhost:8080/");
-        driver1.get("http://localhost:8080/");
+    @Test
+    /* Método que el primer jugador que pone la jugada es el que pierde*/  
+    public void loss (){
         String addnick = "Isaac";
         String addnick1 = "Jorge";
-        driver.findElement(By.id("nickname")).sendKeys(addnick);
-        driver1.findElement(By.id("nickname")).sendKeys(addnick1);
-        driver.findElement(By.id("startBtn")).click();
-        driver1.findElement(By.id("startBtn")).click();
+        login(addnick,addnick1);
         driver.findElement(By.id("cell-0")).click();
         driver1.findElement(By.id("cell-3")).click();
         driver.findElement(By.id("cell-1")).click();
