@@ -89,7 +89,9 @@ public class SistemaTest {
         driver1.findElement(By.id("cell-4")).click();
         driver.findElement(By.id("cell-2")).click();
         String res = driver.switchTo().alert().getText();
+        String res1 = driver1.switchTo().alert().getText();
         assertThat(res).isEqualTo(addnick+" wins! "+addnick1+" looses.");
+        assertThat(res1).isEqualTo(addnick+" wins! "+addnick1+" looses.");
     }
     
     /**
@@ -110,7 +112,9 @@ public class SistemaTest {
         driver1.findElement(By.id("cell-8")).click();
         driver.findElement(By.id("cell-6")).click();
         String res = driver.switchTo().alert().getText();
+        String res1 = driver1.switchTo().alert().getText();
         assertThat(res).isEqualTo("Draw!");
+        assertThat(res1).isEqualTo("Draw!");
     }
     
     /**
@@ -128,6 +132,8 @@ public class SistemaTest {
         driver.findElement(By.id("cell-6")).click();
         driver1.findElement(By.id("cell-5")).click();
         String res = driver.switchTo().alert().getText();
+        String res1 = driver1.switchTo().alert().getText();
         assertThat(res).isEqualTo(addnick1+" wins! "+addnick+" looses.");
+        assertThat(res1).isEqualTo(addnick1+" wins! "+addnick+" looses.");
     }
 }
